@@ -61,6 +61,12 @@ export def field-edit [table_name: string field_name: string id_name: string id:
   record-update $table_name {$field_name:$field_value} (id-where $table_name $id)
 }
 
+export def field-view [table_name: string field_name: string id_name: string id: int] {
+  let file_path = mktemp --dry --suffix $"($table_name)_($field_name).md"
+  let field_value = query-db $"select ($field_name) from ($table_name) where ($id_name) = ($id)" | first | get $field_name
+  $field_value | glow
+}
+
 export def id-where [table_name: string id:int] {
   $"($table_name)_id=($id)"
 }
@@ -76,12 +82,12 @@ export def format-bool [field_name: string] {
   update $field_name { |r| $r | get $field_name | into bool}
 }
 
-export def trim-string [field_name: string] {
+export def trim-string [field_name: string, len: int = 50] {
   update $field_name { |r|
     $r | get $field_name |
     if ($in | is-empty) {
       return null
     }
-    $in | str substring 0..50
+    $in | str substring 0..($len)
   }
 }
