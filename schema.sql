@@ -43,7 +43,7 @@ CREATE TABLE reference (
     reference_url text,
     question_id integer not null
         constraint question_id_fk references question (question_id) on delete cascade,
-    description text question_id integer NOT NULL CONSTRAINT question_id_fk REFERENCES question (question_id) ON DELETE CASCADE,
+    description text,
     date_modified text DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
     date_created text DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );

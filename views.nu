@@ -40,10 +40,18 @@ export def tests-list [] {
                         LEFT JOIN current cq ON t.question_id = cq.question_id
                     ORDER BY
                         is_current DESC,
-                        date_modified DESC" |
-                    base format-dates |
-                    base format-bool is_current |
-                    base format-bool is_tested |
-                    base format-bool is_refuted |
-                    base trim-string result 100
+                        date_modified DESC" | base format-dates | base format-bool is_current | base format-bool is_tested | base format-bool is_refuted | base trim-string result 100
+}
+
+export def refs-list [] {
+  base query-db "SELECT
+                        reference_id,
+                        reference_name,
+                        reference_url,
+                        question_id,
+                        description,
+                        date_created,
+                        date_modified
+                    FROM
+                        reference order by date_modified desc" | base format-dates | base trim-string reference_url 20 | base trim-string description 20
 }

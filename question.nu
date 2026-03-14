@@ -54,9 +54,9 @@ def question-edit [ field_name: string] {
 
 }
 
-export def resolve [is_resolved: bool] {
+export def resolve [is_resolved: bool = true] {
   let question = current-get 
-  base record-update question {is_resolved: $is_resolved} (base id-where question $question.question_id)
+  base record-update question {is_resolved: ($is_resolved | into int)} (base id-where question $question.question_id)
   if ($question.parent_id | is-not-empty) {
     let activate_parent = base yes-no-input "Do you want to activate the parent question?"
     if $activate_parent {
@@ -66,6 +66,9 @@ export def resolve [is_resolved: bool] {
   current-display
 }
 
+export def list [] {
+  views questions-list
+}
 
 export def list-unresolved [] {
   views questions-list | where not is_resolved 
