@@ -73,6 +73,11 @@ export def list-unresolved [] {
 
 export def current-set [question_id: int] {
   base current-set 'question_id' $question_id
+  let tests = views tests-list | where question_id == $question_id and is_tested == false | sort-by -r date_modified 
+  if ($tests | length) > 0 {
+    let test_id = $tests | $in.0.test_id
+    base current-set 'test_id' $test_id
+  }
 }
 
 export def current-id [] {
@@ -85,8 +90,7 @@ export def current-get [] {
 
 export def current-display [] {
   let question = current-get
-  let tests = views tests-list | where question_id == $question.question_id | reject question_id
   print $question
   print Tests:
-  print $tests
+  views tests-list | where question_id == $question.question_id | reject question_id | enumerate
 }

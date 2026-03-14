@@ -45,5 +45,5 @@ export def tests-list [] {
                     base format-bool is_current |
                     base format-bool is_tested |
                     base format-bool is_refuted |
-                    base trim-string result 20
+                    base trim-string result 100
 }

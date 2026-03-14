@@ -1,7 +1,7 @@
 const db_path = path self | path dirname | path join "questions.sqlite"
 
 export def load [] {
-  stor import -f $db_path
+  stor import -f $db_path | ignore
 }
 
 export def save [] {

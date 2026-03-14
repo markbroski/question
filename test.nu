@@ -1,5 +1,6 @@
 use base.nu
 use question.nu
+use views.nu 
 
 export def add [] {
   let test = get-new-test-details
@@ -25,7 +26,7 @@ def new-test-current-set [] {
 
 export def current-set [test_id: int] {
   base current-set test_id $test_id
-  question current-display
+  current-get
 }
 
 export def complete [] {
@@ -34,7 +35,7 @@ export def complete [] {
   let is_refuted = base yes-no-input "Did you refute the hypothesis?" | into int
   let is_tested = true | into int
   input "Describe the test results"
-  result-edit
+  base field-edit test result test_id $test_id
   let record = {is_refuted: $is_refuted is_tested: $is_tested}
   base record-update test $record $where_clause
   if ($is_refuted == 0) {
@@ -52,6 +53,13 @@ export def complete [] {
 export def result-edit [] {
   let test_id = test-current-id
   base field-edit test result test_id $test_id
+  question current-display 
+}
+
+export def current-get [] {
+  let test_id = test-current-id
+  views tests-list | where test_id == $test_id | first  
+
 }
 
 export def result-view [] {
