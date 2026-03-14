@@ -28,7 +28,7 @@ def save-if-necessary [] {
   }
   let last_saved_date: datetime = open $last_save_path
   if ($now - $last_saved_date) > 10min {
-    db db-save
+    db save
     $now | save -f $last_save_path
   }
 }
@@ -90,4 +90,9 @@ export def trim-string [field_name: string, len: int = 50] {
     }
     $in | str substring 0..($len)
   }
+}
+
+export def yes-no-input [question: string] {
+  [yes no] | input list $question |
+  match $in {yes => true, no => false}
 }

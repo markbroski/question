@@ -54,7 +54,7 @@ CREATE TABLE test (
     test_id integer NOT NULL CONSTRAINT test_pk PRIMARY KEY autoincrement,
     question_id integer CONSTRAINT test_question_question_id_fk REFERENCES question,
     hypothesis text NOT NULL,
-    is_refuted integer DEFAULT NULL,
+    is_refuted integer DEFAULT 0,
     is_tested integer DEFAULT 0,
     result text,
     date_modified text DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
