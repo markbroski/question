@@ -40,8 +40,12 @@ export def url-edit [] {
   base field-edit reference reference_url reference_id (current-get)
 }
 
+export def description-edit [] {
+  base field-edit reference description reference_id (current-get)
+}
+
 export def current-display [] {
-  base query-db $"select * from reference where reference_id = (current-get)"
+  base query-db $"select * from reference where reference_id = (current-get)" | base format-dates 
 }
 
 

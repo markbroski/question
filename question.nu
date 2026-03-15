@@ -93,7 +93,7 @@ export def current-get [] {
 
 export def current-display [] {
   let question = current-get
-  print $question
-  print Tests:
-  views tests-list | where question_id == $question.question_id | reject question_id | enumerate
+  let tests = views tests-list | where question_id == $question.question_id | reject question_id | enumerate
+  let refs = views refs-list | where question_id == $question.question_id | reject question_id | enumerate
+  {question: $question tests: $tests refs: $refs}
 }
