@@ -28,4 +28,21 @@ export def view [reference_id: int] {
   ^open $ref
 }
 
+export def current-set [id: int] {
+  base current-set reference_id $id
+}
+
+export def current-get [] {
+  base current-get reference_id
+}
+
+export def url-edit [] {
+  base field-edit reference reference_url reference_id (current-get)
+}
+
+export def current-display [] {
+  base query-db $"select * from reference where reference_id = (current-get)"
+}
+
+
 
