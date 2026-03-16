@@ -14,8 +14,10 @@ export def add [] {
    question_id: $question_id
    description: $description
   }
-  print $record
   base record-insert reference $record 
+  let reference_id = base last-id-get reference
+  base current-set reference_id $reference_id 
+  current-get
 }
 
 export def list [] {
@@ -30,23 +32,24 @@ export def view [reference_id: int] {
 
 export def current-set [id: int] {
   base current-set reference_id $id
-}
-
-export def current-get [] {
-  base current-get reference_id
+  current-get
 }
 
 export def url-edit [] {
-  base field-edit reference reference_url reference_id (current-get)
+  base field-edit reference reference_url reference_id (current-ref_id-get)
 }
 
 export def description-edit [] {
-  base field-edit reference description reference_id (current-get)
-}
-
-export def current-display [] {
-  base query-db $"select * from reference where reference_id = (current-get)" | base format-dates 
+  base field-edit reference description reference_id (current-ref_id-get)
 }
 
 
 
+
+export def current-id [] {
+  base current-get test_id
+}
+
+export def current-get [] {
+  views tests-list | where is_current | first
+}

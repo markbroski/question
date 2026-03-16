@@ -56,17 +56,23 @@ export def result-edit [] {
   question current-display 
 }
 
-export def current-get [] {
-  let test_id = test-current-id
-  views tests-list | where test_id == $test_id | first  
-
-}
-
 export def result-view [] {
   let test_id = test-current-id
   base field-view test result test_id $test_id
 }
 
-def test-current-id [] {
+
+export def current-id [] {
   base current-get test_id
+}
+
+export def current-get [] {
+  views tests-list | where is_current | first
+}
+
+export def list [] {
+  views tests-list | enumerate
+}
+export def list-incomplete [] {
+  views tests-list | where not is_tested | enumerate
 }

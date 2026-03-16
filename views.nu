@@ -45,13 +45,21 @@ export def tests-list [] {
 
 export def refs-list [] {
   base query-db "SELECT
-                        reference_id,
+                        r.reference_id,
                         reference_name,
                         reference_url,
-                        question_id,
+                        r.question_id,
+                        CASE
+                            WHEN c.reference_id IS NULL THEN 0
+                            ELSE 1
+                        END is_current,
                         description,
                         date_created,
                         date_modified
                     FROM
-                        reference order by date_modified desc" | base format-dates | base trim-string reference_url 20 | base trim-string description 20
+                        reference r
+                        LEFT JOIN current c ON r.reference_id = c.reference_id
+                    ORDER BY
+                        date_modified DESC" |
+                        base format-dates | base format-bool is_current | base trim-string reference_url 20 | base trim-string description 50
 }

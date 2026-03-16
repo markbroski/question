@@ -67,11 +67,11 @@ export def resolve [is_resolved: bool = true] {
 }
 
 export def list [] {
-  views questions-list
+  views questions-list | enumerate
 }
 
 export def list-unresolved [] {
-  views questions-list | where not is_resolved 
+  views questions-list | where not is_resolved | enumerate
 }
 
 export def current-set [question_id: int] {
