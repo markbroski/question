@@ -10,7 +10,7 @@ export alias ql = question list
 export alias qlu = question list-unresolved
 export alias qr = question resolve
 export alias qae = question answer-edit
-export alias qcg = question current-display
+export alias qcd = question current-display
 export alias qcs = question current-set
 use test.nu
 export alias ta = test add
