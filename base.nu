@@ -27,7 +27,7 @@ def save-if-necessary [] {
     $old_date | save $last_save_path
   }
   let last_saved_date: datetime = open $last_save_path
-  if ($now - $last_saved_date) > 10min {
+  if ($now - $last_saved_date) > 1min {
     db save-to-file 
     $now | save -f $last_save_path
   }

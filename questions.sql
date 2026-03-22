@@ -11,8 +11,9 @@ CREATE TABLE question (
     date_created text DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
     CONSTRAINT question_name_unique UNIQUE (question_name, parent_id)
 );
-INSERT INTO question VALUES(1,'How do I tell Kitty where to look for the config directory',NULL,NULL,NULL,0,'2026-03-22 16:04:13','2026-03-22 16:04:13');
+INSERT INTO question VALUES(1,'How do I tell Kitty where to look for the config directory',unistr('launchctl setenv XDG_CONFIG_HOME $"($env.HOME)/.config"\u000a'),NULL,NULL,1,'2026-03-22 16:47:39','2026-03-22 16:04:13');
 INSERT INTO question VALUES(2,'How do I get started with Azure development',NULL,NULL,NULL,0,'2026-03-22 16:39:17','2026-03-22 16:39:17');
+INSERT INTO question VALUES(3,'How do I set up a local account',NULL,NULL,2,0,'2026-03-22 16:41:08','2026-03-22 16:39:35');
 CREATE TABLE reference (
     reference_id integer NOT NULL CONSTRAINT reference_pk PRIMARY KEY autoincrement,
     reference_name text,
@@ -38,8 +39,8 @@ CREATE TABLE current (
     test_id integer CONSTRAINT current_test_test_id_fk REFERENCES test,
     reference_id integer CONSTRAINT current_reference_id_fk REFERENCES reference(reference_id)
 );
-INSERT INTO "current" VALUES(NULL,NULL,NULL);
-INSERT INTO sqlite_sequence VALUES('question',2);
+INSERT INTO "current" VALUES(1,NULL,NULL);
+INSERT INTO sqlite_sequence VALUES('question',3);
 INSERT INTO sqlite_sequence VALUES('question',1);
 CREATE TRIGGER question_set_date_modified
 AFTER
