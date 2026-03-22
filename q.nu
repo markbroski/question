@@ -6,10 +6,14 @@ export module test.nu
 export module views.nu
 export module ref.nu
 use question.nu
+export alias qa = question add
 export alias ql = question list
 export alias qlu = question list-unresolved
 export alias qr = question resolve
 export alias qae = question answer-edit
+export alias qav = question answer-view 
+export alias qde = question detail-edit
+export alias qdv = question detail-view 
 export alias qcd = question current-display
 export alias qcs = question current-set
 use test.nu
