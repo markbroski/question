@@ -17,6 +17,7 @@ export def backup [] {
 }
 
 export def restore-from-backup [] {
+  rm $db_path
   open -r $db_backup_path | sqlite3 $db_path
 }
 
