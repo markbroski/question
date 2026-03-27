@@ -1,4 +1,5 @@
 use constants.nu *
+use time.nu
 
 export def load [] {
   if not ($env.question_data_file | path exists) {
@@ -8,7 +9,7 @@ export def load [] {
 }
 
 export def load-df [] {
-  load | load-df-piped 
+  load | load-df-piped
 }
 
 # export def load-df-piped [] {
@@ -34,18 +35,54 @@ export def load-df [] {
 #   polars rename date_modified.t task_modified |
 #   polars rename date_created.t task_created |
 # }
-
+#
+#
 export def reset [] {
-  $blank_record | save -f $env.question_data_file
+  if (input "Are you sure? (y|n)" | $in) == 'y' {
+    $blank_record | save -f $env.question_data_file
+  }
 }
 
 export def to-file [] {
   tee {
     to nuon -i 2 | save -f $env.question_data_file
     cd ($env.question_data_file | path dirname)
-    git add -A
+    git add $env.question_data_file
     git commit -m "question auto commit" | ignore
   }
 }
 
+export def update-row [path: record<entity_name: string, id_name: string, id_value: int>, values: record] {
+  let rec = $in
+  let index = $rec | index-of-entity $path
+  let cell_path = make-row-path $path.entity_name $index
+  $rec |
+    update $cell_path (
+      $in |
+      get $cell_path |
+      merge $values |
+      time mod-date
+  ) | to-file
 
+}
+
+export def get-field-value [path: record<entity_name: string, id_name: string, id_value: int, field_name: string>] {
+  get $path.entity_name | where {($in | get $path.id_name) == $path.id_value} | first | get $path.field_name
+}
+
+export def index-of-entity [path: record<entity_name: string id_name: string id_value: int>] {
+  let rec = $in
+  let cell_path = ([item $path.id_name] | into cell-path)
+  $rec | get $path.entity_name |
+  enumerate |
+  where {($in | get $cell_path) == $path.id_value } |
+  $in.0.index
+}
+
+def make-row-path [entity_name: string index: int] {
+  [
+    $entity_name
+    $index
+  ] |
+  into cell-path
+}

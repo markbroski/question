@@ -40,18 +40,17 @@ def question-record-new [rec: record] {
     answer: null
     resolved: false
   } |
-  time mod-date | time create-date        
+  time mod-date | time create-date
 }
 
 def test-record-new [rec: record] {
   {
+    question_id: (get-test-question $rec)
     test_id: $rec.sequence.test
     test_name: (name-input "New Test")
     test_detail: null
-    question_id: (get-test-question $rec)
-    is_refuted: false
-    is_tested: false
-  } | time mod-date | time create-date 
+    result: 'untested'
+  } | time mod-date | time create-date
 }
 
 def ref-record-new [rec: record] {
@@ -60,7 +59,7 @@ def ref-record-new [rec: record] {
     ref_name: (name-input "Ref Name")
     url: (input "Url: ")
     question_id: (get-question-parent $rec)
-  } | time mod-date | time create-date 
+  } | time mod-date | time create-date
 }
 
 def get-question-parent [rec: record] {
@@ -68,7 +67,7 @@ def get-question-parent [rec: record] {
 }
 
 def get-test-question [rec: record] {
-  get-questions $rec | select-question 
+  get-questions $rec | select-question
 }
 
 def get-questions [rec: record] {
