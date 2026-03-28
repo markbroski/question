@@ -55,10 +55,10 @@ def test-record-new [rec: record] {
 
 def ref-record-new [rec: record] {
   {
+    question_id: (get-question-parent $rec)
     ref_id: $rec.sequence.ref
     ref_name: (name-input "Ref Name")
     url: (input "Url: ")
-    question_id: (get-question-parent $rec)
   } | time mod-date | time create-date
 }
 

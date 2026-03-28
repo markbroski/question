@@ -3,13 +3,13 @@ use display.nu
 
 export module question {
 
-  const entity_name = 'questions'
-  const id_name = 'question_id'
+  const base_path = { entity_name: questions id_name: question_id}
 
   export def resolved [question_id: int is_resolved: bool = true] {
-    let rec = data load
-    let cell_path = data get-cell-path $rec $entity_name $id_name $question_id 'resolved'
-    $rec | update $cell_path $is_resolved | data to-file | display question-piped $question_id
+    let path = $base_path | merge {id_value: $question_id}
+    let values = { resolved: $is_resolved }
+    data load | data update-row $path $values |
+    display question-piped $question_id
   }
 
 }

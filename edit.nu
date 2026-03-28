@@ -14,7 +14,7 @@ export module question {
   }
 
   def edit [question_id: int field_name: string] {
-    edit-field ($base_path | merge {id_value: $question_id field_name: $field_name})
+    edit-field ($base_path | merge {id_value: $question_id field_name: $field_name}) {|| display question-piped $question_id}
   }
 
 }
@@ -32,9 +32,10 @@ export module test {
   }
 
   def edit [test_id: int field_name: string] {
-    edit-field ($base_path | merge {id_value: $test_id field_name: $field_name})
+    edit-field ($base_path | merge {id_value: $test_id field_name: $field_name}) {|| display test-piped $test_id}
   }
- }
+
+}
 
 export module ref {
 
@@ -49,17 +50,18 @@ export module ref {
   }
 
   def edit [ref_id: int field_name: string] {
-    edit-field ($base_path | merge {id_value: $ref_id field_name: $field_name})
+    edit-field ($base_path | merge {id_value: $ref_id field_name: $field_name}) {|| display ref-piped $ref_id}
   }
 
 }
 
-def edit-field [path: record<entity_name: string, id_name:string, id_value: int, field_name:string> ] {
+def edit-field [path: record<entity_name: string, id_name:string, id_value: int, field_name:string> display: closure ] {
   let rec = data load
   let file_path = mktemp --dry --suffix '.md'
   $rec | data get-field-value $path | save $file_path
   hx $file_path
   let value = open -r $file_path | str replace -r '\n$' ''
-  $rec | data update-row $path {$path.field_name: $value}
+  $rec | data update-row $path {$path.field_name: $value} |
+  do $display $in
 }
 
