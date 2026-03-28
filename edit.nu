@@ -24,7 +24,7 @@ export module test {
   const base_path = {entity_name: tests id_name: test_id}
 
   export def detail [test_id: int] {
-    edit $test_id detail
+    edit $test_id test_detail
   }
 
   export def hypothesis [test_id: int] {
