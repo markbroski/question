@@ -47,7 +47,7 @@ def test-record-new [rec: record] {
   {
     question_id: (get-test-question $rec)
     test_id: $rec.sequence.test
-    test_name: (name-input "New Test")
+    hypothesis: (name-input "Hypothesis")
     test_detail: null
     result: 'untested'
   } | time mod-date | time create-date

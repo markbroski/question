@@ -27,8 +27,8 @@ export module test {
     edit $test_id detail
   }
 
-  export def name [test_id: int] {
-    edit $test_id test_name
+  export def hypothesis [test_id: int] {
+    edit $test_id hypothesis
   }
 
   def edit [test_id: int field_name: string] {

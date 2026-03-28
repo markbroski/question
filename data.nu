@@ -8,7 +8,7 @@ export def load [] {
   open $env.question_data_file
 }
 
- export def load-questions-tests-df [] {
+ export def questions-tests-df [] {
    let rec = load
    let questions = $rec.questions| polars into-df -s ($question_schema | polars into-schema)
    let tests = $rec.tests | polars into-df -s ($test_schema | polars into-schema)
