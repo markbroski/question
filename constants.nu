@@ -24,8 +24,7 @@ export const test_schema = {
   hypothesis: "str"
   test_detail: "str"
   question_id: "i64"
-  is_refuted: "bool"
-  is_tested: "bool"
+  result: "str"
   date_modified: "datetime<ns, UTC>"
   date_created: "datetime<ns, UTC>"
 }
