@@ -8,24 +8,39 @@ export def load [] {
   open $env.question_data_file
 }
 
-# # export def load-df [] {
-#   load | load-df-piped
-# }
+ export def load-questions-tests-df [] {
+   let rec = load
+   let questions = $rec.questions| polars into-df -s ($question_schema | polars into-schema)
+   let tests = $rec.tests | polars into-df -s ($test_schema | polars into-schema)
+   $questions |
+   polars join -l -s .t $tests question_id question_id |
+   polars rename date_modified.t test_modified |
+   polars rename date_created.t test_created |
+ }
 
- # export def load-df-piped [] {
- #   let rec = $in
- #   let questions = $rec.questions| polars into-df -s ($question_schema | polars into-schema)
- #   let tests = $rec.tests | polars into-df -s ($test_schema | polars into-schema)
- #   let refs = $rec.refs | polars into-df -s ($ref_schema| polars into-schema)
- #   $questions |
- #   polars join -l -s .t $tests question_id question_id |
- #   polars join -l -s .r $refs question_id question_id |
- #   polars rename date_modified.t test_modified |
- #   polars rename date_created.t test_created |
- #   polars rename date_modified.r ref_modified |
- #   polars rename date_created.r ref_created |
- # }
+def tests-rollup [] {
+  $in.tests |
+  polars into-df -s ($test_schema | polars into-schema) |
+  polars pivot -o [result] -i [question_id] -v [test_id] -a count --stable
+}
 
+def refs-rollup [] {
+  $in.refs |
+  polars into-df -s ($ref_schema | polars into-schema) |
+  polars group-by question_id |
+  polars agg [(polars col ref_id | polars count | polars as references)]
+}
+
+export def questions-rollup [] {
+  let rec = load
+  let tests = $rec | tests-rollup
+  let refs = $rec | refs-rollup
+  let questions = $rec.questions | polars into-df -s ($question_schema | polars into-schema)
+  $questions |
+  polars join -l $tests question_id question_id |
+  polars join -l $refs question_id question_id |
+  polars with-column { references: (polars col references | polars fill-null 0) }
+}
 
 
 export def reset [] {
