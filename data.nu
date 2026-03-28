@@ -8,35 +8,26 @@ export def load [] {
   open $env.question_data_file
 }
 
-export def load-df [] {
-  load | load-df-piped
-}
-
-# export def load-df-piped [] {
-#   let rec = $in
-#   let areas = $rec.areas | polars into-df -s ($area_schema | polars into-schema)
-#   let projects = $rec.projects | polars into-df -s ($project_schema | polars into-schema)
-#   let tasks = $rec.tasks | polars into-df -s ($task_schema | polars into-schema)
-#   $areas |
-#   polars join -l -s .p $projects area_id area_id |
-#   polars join -l -s .t $tasks project_id project_id |
-#   polars rename active area_active |
-#   polars rename date_modified area_modified |
-#   polars rename date_created area_created |
-#   polars rename active.p project_active |
-#   polars rename someday project_someday |
-#   polars rename dropped project_dropped |
-#   polars rename completed project_completed |
-#   polars rename date_modified.p project_modified |
-#   polars rename date_created.p project_created |
-#   polars rename active.t task_active |
-#   polars rename completed.t task_completed |
-#   polars rename dropped.t task_dropped |
-#   polars rename date_modified.t task_modified |
-#   polars rename date_created.t task_created |
+# # export def load-df [] {
+#   load | load-df-piped
 # }
-#
-#
+
+ # export def load-df-piped [] {
+ #   let rec = $in
+ #   let questions = $rec.questions| polars into-df -s ($question_schema | polars into-schema)
+ #   let tests = $rec.tests | polars into-df -s ($test_schema | polars into-schema)
+ #   let refs = $rec.refs | polars into-df -s ($ref_schema| polars into-schema)
+ #   $questions |
+ #   polars join -l -s .t $tests question_id question_id |
+ #   polars join -l -s .r $refs question_id question_id |
+ #   polars rename date_modified.t test_modified |
+ #   polars rename date_created.t test_created |
+ #   polars rename date_modified.r ref_modified |
+ #   polars rename date_created.r ref_created |
+ # }
+
+
+
 export def reset [] {
   if (input "Are you sure? (y|n)" | $in) == 'y' {
     $blank_record | save -f $env.question_data_file
