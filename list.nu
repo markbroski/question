@@ -16,7 +16,7 @@ export module questions {
   }
 
   def row-trim [] {
-    update answer { cell-trim }
+    update answer { data cell-trim }
   }
 }
 
@@ -49,13 +49,8 @@ export module tests {
   }
 
   def row-trim [] {
-    update test_detail { cell-trim }
+    update test_detail { data cell-trim }
   }
 }
 
-def cell-trim [] {
-  if ($in | is-not-empty) {
-    ($in | str substring 0..15) + '...'
-  }
-}
 

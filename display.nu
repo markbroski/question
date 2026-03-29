@@ -7,8 +7,8 @@ export def question [question_id: int] {
 export def question-piped [question_id: int] {
   $in.questions | where question_id == $question_id
   {
-    question: ($in.questions | where question_id == $question_id | list-to-first )
-    tests: ($in.tests | where question_id == $question_id | reject question_id)
+    question: ($in.questions | where question_id == $question_id | list-to-first | update answer { data cell-trim 50 })
+    tests: ($in.tests | where question_id == $question_id | reject question_id | update test_detail { data cell-trim })
     refs: ($in.refs | where question_id == $question_id | reject question_id)
   }
 }
