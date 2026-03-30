@@ -34,9 +34,9 @@ export def ref [] {
 
 def question-record-new [rec: record] {
   {
+    parent_id: (get-question-parent $rec)
     question_id: $rec.sequence.question
     question_name: (name-input "New question")
-    parent_id: (get-question-parent $rec)
     answer: null
     resolved: false
   } |

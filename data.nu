@@ -1,11 +1,12 @@
 use constants.nu *
 use time.nu
+use reader.nu
+use writer.nu
+
+const file_extension = {nuon: nuon uuid: uuid age: age}
 
 export def load [] {
-  if not ($env.question_data_file | path exists) {
-    $blank_record | save $env.question_data_file
-  }
-  open $env.question_data_file
+  reader read-data-file
 }
 
 export def questions-tests-df [] {
@@ -33,16 +34,13 @@ export def questions-rollup [] {
 
 export def reset [] {
   if (input "Are you sure? (y|n)" | $in) == 'y' {
-    $blank_record | save -f $env.question_data_file
+    $blank_record | to-file
   }
 }
 
 export def to-file [] {
   tee {
-    to nuon -i 2 | save -f $env.question_data_file
-    cd ($env.question_data_file | path dirname)
-    git add $env.question_data_file
-    git commit -m "question auto commit" | ignore
+    writer write-data-file
   }
 }
 
