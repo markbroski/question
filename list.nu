@@ -53,34 +53,4 @@ export module tests {
   }
 }
 
-export module tests {
-
-  export def all [] {
-    display {|| $in }
-  }
-
-  export def untested [] {
-    display {|| where result == untested}
-  }
-
-  export def tested [] {
-    display {|| where result == tested }
-  }
-
-  export def refuted [] {
-    display {|| where result == refuted}
-  }
-
-  def display [filter: closure] {
-    data questions-tests-df |
-    polars select test_id hypothesis test_detail result question_id question_name test_modified test_created |
-    polars into-nu |
-    do $filter $in |
-    sort-by question_id
-  }
-
-
-
-}
-
 
