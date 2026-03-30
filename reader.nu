@@ -11,7 +11,7 @@ export def read-data-file [] {
 def save-blank-record-if-needed [] {
   if not (path_info data-path | path exists) {
     print "Setting up a new data file"
-    $constants.blank_record | writer data-file
+    $constants.blank_record | writer write-data-file
   }
 }
 
