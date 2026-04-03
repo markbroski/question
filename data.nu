@@ -29,7 +29,12 @@ export def questions-rollup [] {
   let tests = $rec | tests-rollup
   let refs = $rec | refs-rollup
   let questions = $rec.questions | polars into-df -s ($question_schema | polars into-schema)
-  $questions | polars join -l $tests question_id question_id | polars join -l $refs question_id question_id | polars with-column {references: (polars col references | polars fill-null 0)}
+  $questions |
+  polars join -l $tests question_id question_id |
+  polars join -l $refs question_id question_id |
+  polars join -l -s "." $questions question_id parent_id |
+  polars with-column {references: (polars col references |
+  polars fill-null 0)}
 }
 
 export def reset [] {
@@ -72,6 +77,6 @@ def make-row-path [entity_name: string index: int] {
 
 export def cell-trim [len: int = 15] {
   if ($in | is-not-empty) {
-    ($in | str substring 0..$len) + '...'
+    ($in | str trim | str substring 0..$len) + '...'
   }
 }

@@ -11,7 +11,7 @@ export def write-data-file [] {
 }
 
 def encrypt-data [$rec_nuon: string] {
-  $rec_nuon | age -e -r $env.questions_public_key -a | save -f (path_info share-path)
+  $rec_nuon | age -e -r $env.age_public_key -a | save -f (path_info share-path)
 }
 
 def copy-uuid-to-share-dir [] {
