@@ -32,7 +32,7 @@ export def questions-rollup [] {
   $questions |
   polars join -l $tests question_id question_id |
   polars join -l $refs question_id question_id |
-  polars join -l -s "." $questions question_id parent_id |
+  polars join -l -s ".p" $questions question_id parent_id |
   polars with-column {references: (polars col references |
   polars fill-null 0)}
 }

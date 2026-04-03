@@ -18,6 +18,10 @@ export module questions {
   def row-trim [] {
     update answer { data cell-trim }
   }
+
+  def col-select [] {
+
+  }
 }
 
 export module tests {
