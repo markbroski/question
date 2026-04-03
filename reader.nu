@@ -36,5 +36,5 @@ def data-and-shared-uuids-match [] {
 }
 
 def encrypted-file [] {
-  open (path_info share-path) | age -d -i ~/.age
+  open (path_info share-path) | age -d -i $env.age_identity_file
 }

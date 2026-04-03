@@ -4,19 +4,23 @@ use data.nu
 export module questions {
 
   export def all [] {
-    data questions-rollup | polars into-nu | row-trim | sort-by question_name
+    data questions-rollup | polars into-nu | row-trim | sort-by question_name | col-select
   }
 
   export def resolved [] {
-    data questions-rollup | polars into-nu | where resolved | row-trim | sort-by question_name
+    data questions-rollup | polars into-nu | where resolved | row-trim | sort-by question_name | col-select
   }
 
   export def unresolved [] {
-    data questions-rollup | polars into-nu | where not resolved | row-trim | sort-by question_name
+    data questions-rollup | polars into-nu | where not resolved | row-trim | sort-by question_name | col-select
   }
 
   def row-trim [] {
     update answer { data cell-trim }
+  }
+
+  def col-select [] {
+    select question_id question_name parent_id 'question_name.p' answer resolved date_modified | rename -c {'question_name.p': parent_name }
   }
 }
 
