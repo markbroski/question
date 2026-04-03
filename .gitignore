@@ -1,3 +1,4 @@
 *.sqlite
 *.idea
 .last_saved_date.nuon
+.DS_Store
