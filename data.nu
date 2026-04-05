@@ -1,12 +1,27 @@
 use constants.nu *
 use time.nu
-use reader.nu
-use writer.nu
 
-const file_extension = {nuon: nuon uuid: uuid age: age}
 
 export def load [] {
-  reader read-data-file
+  if not (file-path | path exists) {
+    $blank_record | to nuon | age -e -a -r $env.age_public_key | save (file-path)
+  }
+  open (file-path) | age -d -i ~/.age | from nuon
+}
+
+export def to-file [] {
+  tee {
+    to nuon | age -e -a -r $env.age_public_key | save -f (file-path)
+    cd $env.question_data_dir
+    git add (file-path)
+    git commit -m 'question auto commit' | ignore
+  }
+}
+
+def file-path [] {
+  let base_path = [$env.question_data_dir questions] | path join
+  if not ($base_path | path exists) {mkdir $base_path}
+  [$base_path $env.question_context] | path join | $"($in).age"
 }
 
 export def questions-tests-df [] {
@@ -40,12 +55,6 @@ export def questions-rollup [] {
 export def reset [] {
   if (input "Are you sure? (y|n)" | $in) == 'y' {
     $blank_record | to-file
-  }
-}
-
-export def to-file [] {
-  tee {
-    writer write-data-file
   }
 }
 
