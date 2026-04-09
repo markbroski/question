@@ -1,3 +1,3 @@
 export def title-case [] {
-  str replace -r -a '\b\w' { |c| $c | str upcase }
+  str replace -a -r '^\w|\s\w' { || str upcase }
 }
