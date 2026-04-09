@@ -1,6 +1,7 @@
 use data.nu
 use time.nu
 use display.nu
+use regex.nu
 
 export def question [] {
   data load |
@@ -81,5 +82,5 @@ def select-question [] {
 
 
 export def name-input [prompt: string] {
-  input $"($prompt): " | str replace -a -r '\b([a-zA-Z])' { || str upcase }
+  input $"($prompt): " | regex title-case
 }
