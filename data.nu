@@ -32,7 +32,7 @@ export def questions-tests-df [] {
 }
 
 def tests-rollup [] {
-  $in.tests | polars into-df -s ($test_schema | polars into-schema) | polars pivot -o [result] -i [question_id] -v [test_id] -a count --stable
+  $in.tests | polars into-df -s ($test_schema | polars into-schema) | polars pivot -o [result] -c result -i [question_id] --values [test_id] -a count --stable
 }
 
 def refs-rollup [] {
